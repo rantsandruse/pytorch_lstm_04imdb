@@ -7,8 +7,8 @@ than the number of parameters. So why don't neural networks terribly overfit?
 ### The concept of overfitting and underfitting in classical machine learning 
 This is how the concept of overfitting/underfitting is often explained according to classical machine learning: 
 
-![plot](./figures/classical_risk.png) (source: [Belkin et al, 2020](https://www.pnas.org/content/116/32/15849.short))   
-![plot](./figures/bias_variance_curve.png)    
+![plot](https://github.com/rantsandruse/pytorch_lstm_04imdb/blob/main/figures/classical_risk.png) (source: [Belkin et al, 2020](https://www.pnas.org/content/116/32/15849.short))   
+![plot](https://github.com/rantsandruse/pytorch_lstm_04imdb/blob/main/figures/bias_variance_curve.png)    
 
 In this context, "Underfitting" happens when we have when the model (or function class) H doesn't have enough parameters and 
 is therefore not complex enough to capture the pattern of the training data. Within the underfitting regime, both training and testing error are high (high bias). 
@@ -41,7 +41,7 @@ ii) When we increase the model complexity (e.g. through increasing the number of
    This contradiction was explained by [Belkin et al](https://www.pnas.org/content/116/32/15849.short), who showed that the classical understanding is just 
    part of a bigger picture: 
    
-   ![plot](./figures/double_descent.png) 
+   ![plot](https://github.com/rantsandruse/pytorch_lstm_04imdb/blob/main/figures/double_descent.png) 
    (source: [Belkin et al, 2020](https://www.pnas.org/content/116/32/15849.short))   
    
    This plot effectively explains why neural networks work: With a large model capacity, we've moved into the overparameterized regime,  
@@ -56,7 +56,7 @@ In this experiment, we'd like to understand how our model behaves in the overpar
 come from a 8.1:0.9:1 split. Each experiment was run for a specific hidden dimension size for 200 epochs. With number of hidden dimensions between 
 16 and 2048 and a fairly small dataset (training sample size = 40,500), we are already in the over-parameterized regime. 
 
-![plot](figures/hidden_size_effect.png) 
+![plot](https://github.com/rantsandruse/pytorch_lstm_04imdb/blob/main/figures/hidden_size_effect.png) 
 
 When the number of hidden dimensions varies from 16 to 2,048, our training accuracy fluctuates between 0.972 and 0.999, indicating a near-zero 
 training error. Based on the classical machine learning terminology, we are most certainly "overfitting". In the meantime, the testing and validation accuracy is nearing 
@@ -72,10 +72,10 @@ to the trade-off between performance gain from increasing parameters and computa
    from the Uber AI lab comes with a [fun and educative video](https://www.youtube.com/watch?v=uSZWeRADTFI&feature=emb_logo).  
  
    Briefly, they proposed to train the neural network in a smaller, randomly oriented subspace rather than the large, native space. 
-    ![plot](figures/intrinsic_dim_paper1.png)    
+    ![plot](https://github.com/rantsandruse/pytorch_lstm_04imdb/blob/main/figures/intrinsic_dim_paper1.png)    
    This way, the gradient of loss in a space of D dimensions only moves in the d-dimensional subspace: 
    
-   ![plot](figures/intrinsic_dim_paper2.png) 
+   ![plot](https://github.com/rantsandruse/pytorch_lstm_04imdb/blob/main/figures/intrinsic_dim_paper2.png) 
 
    And finally, the intrinsic dimension is defined as d<sub>int90</sub>, or the d dimensions at which the model achieves 90% performance. 
 
