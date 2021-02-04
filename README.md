@@ -53,11 +53,11 @@ ii) When we increase the model complexity (e.g. through increasing the number of
 #### Our own experiment in the over-parameterized region 
 In this experiment, we'd like to understand how our LSTM model behaves in the over-parameterized regime. The training, validation and test datasets 
 come from a 8.1:0.9:1 split. Each experiment was run for a specific hidden dimension size for 200 epochs. With number of hidden dimensions between 
-64 and 2,048 and a fairly small dataset (training sample size = 40,500), we are already in the over-parameterized regime. 
+32 (42,624 parameters) and 2,048 (19,243,008 parameters) and a fairly small dataset (training sample size = 40,500), we are already in the over-parameterized regime. 
 
 ![plot](https://github.com/rantsandruse/pytorch_lstm_04imdb/blob/main/figures/hidden_size_effect.png) 
 
-When the number of hidden dimensions varies from 64 to 2,048, our training accuracy ranges from 0.991 to 0.999, indicating a near-zero 
+When the number of hidden dimensions varies from 32 to 2,048, our training accuracy ranges from 0.991 to 0.999, indicating a near-zero 
 training error. Based on the classical machine learning terminology, we are certainly "overfitting" to the training data. In the meantime, 
 the testing and validation accuracy is nearing a plateau but shows no significant signs of deterioration. Our observation agrees with the 
 description of the "modern, interpolation regime" from the double descent curve above.   
