@@ -7,8 +7,8 @@ than the number of parameters. So why don't neural networks terribly overfit?
 ### The concept of overfitting and underfitting in classical machine learning 
 This is how the concept of overfitting/underfitting is often explained according to classical machine learning: 
 
-![plot](https://github.com/rantsandruse/pytorch_lstm_04imdb/blob/main/figures/classical_risk.png | width=100) (source: [Belkin et al, 2020](https://www.pnas.org/content/116/32/15849.short))   
-![plot](https://github.com/rantsandruse/pytorch_lstm_04imdb/blob/main/figures/bias_variance_curve.png | width=100)    
+![plot](https://github.com/rantsandruse/pytorch_lstm_04imdb/blob/main/figures/classical_risk.png | width=40) (source: [Belkin et al, 2020](https://www.pnas.org/content/116/32/15849.short))   
+![plot](https://github.com/rantsandruse/pytorch_lstm_04imdb/blob/main/figures/bias_variance_curve.png | width=40)    
 
 In this context, "Underfitting" happens when we have when the model (or function class) H doesn't have enough parameters and 
 is therefore not complex enough to capture the pattern of the training data. Within the underfitting regime, both training and testing error are high (high bias). 
