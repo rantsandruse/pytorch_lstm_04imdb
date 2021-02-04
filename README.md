@@ -1,20 +1,20 @@
 # Day 4: LSTM with IMDB - Does your neural network overfit and why?   
 
-Even a shallow neural network (e.g. an LSTM with one hidden layer) will have tens of thousands of parameters, whereas a 
+Even a shallow neural network (e.g. an LSTM with one hidden layer) may have tens of thousands of parameters, whereas a 
 deep neural network (e.g. GPT3) could have billions of parameters. In the meantime, training dataset size are typically much smaller
 than the number of parameters. So why don't neural networks terribly overfit?  
 
 ### The concept of overfitting and underfitting in classical machine learning 
-This is how the concept of overfitting/underfitting is often explained according to classical machine learning: 
+This is how the concept of overfitting/underfitting is oftentimes explained according to classical machine learning theory: 
 
 ![plot](./figures/bias_variance_curve_combined.png)    
 
 [left image source: [Belkin et al, 2020.](https://www.pnas.org/content/116/32/15849.short) right image source: http://scott.fortmann-roe.com/docs/BiasVariance.html] 
 
-In this context, "Underfitting" happens when we have when the model (or function class) H doesn't have enough parameters and 
-is therefore not complex enough to capture the pattern of the training data. Within the underfitting regime, both training and testing error are high (high bias). 
-In contrast,"overfitting" happens when the model has many parameters and is too complex. It captures too much noise of the training data and does not generalize
-well to the testing data. Within the overfitting regime, training error is relatively low but testing error is relatively high (high variance). 
+In this context, "underfitting" happens when the model (or function class) H doesn't have enough parameters and is therefore 
+not complex enough to capture the pattern of the training data. Within the underfitting regime, both training and testing error 
+are high (high bias). In contrast,"overfitting" happens when the model has many parameters and is too complex. It captures 
+too much noise of the training data and does not generalize well to the testing data. Within the overfitting regime, training error is relatively low but testing error is relatively high (high variance). 
 
 This curve implies that: 
 
@@ -26,58 +26,59 @@ ii) When we increase the model complexity (e.g. through increasing the number of
 
    num_params = 4 * [(num_units + input_dim + 1) * num_units]
    
-   Where 4 comes from the 4 neural network layers (W_forget, W_input, W_output, W_cell) and 1 comes from bias. 
+   Where 4 comes from the four LSTM gates (W_forget, W_input, W_output, W_cell) and 1 comes from bias. 
 
-   So the number of parameters in our LSTM model, given 64 hidden units
+   So the number of parameters in our LSTM model, given 64 hidden units is: 
 
-   4 * (num_units^2 + (input_dim+1) * num_units) = 4 * (64 ^2 + 301 * 64) = 93,440 parameters
-
-   
+    4 * (64 ^2 + (300+1) * 64) = 93,440 parameters
 
 ### Why doesn't our neural network overfit? 
 
    Given that we are training on 93,440 parameters but only uses 50,000 * 0.81 = 40,500 samples for training purposes, why doesn't it terribly overfit? 
-   Or, if it's terribly "overfitting" to the training data, why do we see reasonably good dev/test performance, contradicting to the classical ML risk curve? 
+   Or, if it is terribly "overfitting" to the training data, why do we see reasonably good dev/test performance, contradicting to the classical ML risk curve? 
 
-   This contradiction was explained by [Belkin et al](https://www.pnas.org/content/116/32/15849.short), who showed that the classical understanding is just 
+   This contradiction was explained by Belkin et al in their [PNAS paper](https://www.pnas.org/content/116/32/15849.short), which showed that the classical understanding is just 
    part of a bigger picture: 
    
    ![plot](https://github.com/rantsandruse/pytorch_lstm_04imdb/blob/main/figures/double_descent.png) 
    (source: [Belkin et al, 2020](https://www.pnas.org/content/116/32/15849.short))   
    
-   This plot effectively explains why neural networks work: With a large model capacity, we've moved into the overparameterized regime,  
-   where training error is almost zero, and testing error stays low. (Note that the author describes this as "double descent curve", 
+   The prior risk curve represesnts what's happening in the under-parameterized region. As the model capacity grows larger, 
+   we move into the overparameterized regime, where training error is almost zero, and testing error stays low. (Note that the authors describe this as "double descent curve", 
    but not a "double U" curve.) 
-   The author reasons that this is because model complexity may not tell you how well the underlying inductive bias matches the current problem. 
-   Give that a reasonable inductive bias is "the regularity or smoothness of a function as measured by a certain function space norm". A larger model 
+   The authors reasoned that this is because model complexity may not tell you how well the underlying inductive bias matches the current problem. 
+   Given that a reasonable inductive bias is "the regularity or smoothness of a function as measured by a certain function space norm", a larger model 
    such as a neural network makes it easier to find interpolating functions with smaller norm, thus matching the inductive bias.
 
 #### Our own experiment in the over-parameterized region 
-In this experiment, we'd like to understand how our model behaves in the overparameterized regime. The training, validation and test datasets 
+In this experiment, we'd like to understand how our LSTM model behaves in the over-parameterized regime. The training, validation and test datasets 
 come from a 8.1:0.9:1 split. Each experiment was run for a specific hidden dimension size for 200 epochs. With number of hidden dimensions between 
-16 and 2048 and a fairly small dataset (training sample size = 40,500), we are already in the over-parameterized regime. 
+64 and 2,048 and a fairly small dataset (training sample size = 40,500), we are already in the over-parameterized regime. 
 
 ![plot](https://github.com/rantsandruse/pytorch_lstm_04imdb/blob/main/figures/hidden_size_effect.png) 
 
-When the number of hidden dimensions varies from 16 to 2,048, our training accuracy fluctuates between 0.972 and 0.999, indicating a near-zero 
-training error. Based on the classical machine learning terminology, we are most certainly "overfitting". In the meantime, the testing and validation accuracy is nearing 
-a plateau but shows no significant signs of deterioration. Our observation agrees with the description of the "modern, interpolation regime".  
+When the number of hidden dimensions varies from 64 to 2,048, our training accuracy ranges from 0.991 to 0.999, indicating a near-zero 
+training error. Based on the classical machine learning terminology, we are certainly "overfitting" to the training data. In the meantime, 
+the testing and validation accuracy is nearing a plateau but shows no significant signs of deterioration. Our observation agrees with the 
+description of the "modern, interpolation regime" from the double descent curve above.   
 
-Our experiment tells us we should not be terrified of "overfitting" caused by using a larger neural network, but we should pay attention
+Our experiment suggests that we should not be terrified of "overfitting" caused by using a larger neural network. Instead, but we should pay attention
 to the trade-off between performance gain from increasing parameters and computational cost. 
 
 ### Neural network and its intrinsic dimensions  
    There's also a different angle to look at this: For simpler models such as linear regression, the number of parameters is equal to the degrees of freedom. 
    However, [the number is much lower than the number of parameters for deep neural networks](https://arxiv.org/abs/1603.09260). 
-   One way of getting a quantitative understanding of degrees of freedom for DNN is by calculating the intrinsic dimension. This [paper](https://arxiv.org/abs/1804.08838) 
+   One way of getting a quantitative understanding of degrees of freedom for neural networks is by calculating the intrinsic dimension. This [paper](https://arxiv.org/abs/1804.08838) 
    from the Uber AI lab comes with a [fun and educative video](https://www.youtube.com/watch?v=uSZWeRADTFI&feature=emb_logo).  
  
-   Briefly, they proposed to train the neural network in a smaller, randomly oriented subspace rather than the large, native space. 
+   Briefly, they proposed to train the neural network in a smaller, randomly oriented subspace rather than the large, native space, using a random 
+   projection matrix *P*:  
     ![plot](https://github.com/rantsandruse/pytorch_lstm_04imdb/blob/main/figures/intrinsic_dim_paper1.png)    
-   This way, the gradient of loss in a space of D dimensions only moves in the d-dimensional subspace: 
+
+   This way, the gradient of loss in a space of D dimensions moves into the d-dimensional subspace: 
    
    ![plot](https://github.com/rantsandruse/pytorch_lstm_04imdb/blob/main/figures/intrinsic_dim_paper2.png) 
-
+   (image source: [Yosinski et al](https://arxiv.org/abs/1804.08838)) 
    And finally, the intrinsic dimension is defined as d<sub>int90</sub>, or the d dimensions at which the model achieves 90% performance. 
 
 #### Our experiment with intrinsic dimensions 
@@ -135,17 +136,16 @@ is fairly robust to changes in layer width and depth.
    the overparameterized region. Overparameterized neural networks are likely to achieve zero training error without compromising 
    testing performance. In other words, "overfitting" on training data is not the enemy of neural networks (and other ML models with high complexity).  
 2. The intrinsic dimension idea can further help us understand why "overfitting" does not happen with neural networks: 
-   a) The intrinsic dimension of a neural network is orders of magnitude smaller than the number of parameters. 
-   b) The size of intrinsic dimension (as a measure of model complexity) is quite robust against changes in the number of parameters (layer width and depth).  
+   - The intrinsic dimension of a neural network is orders of magnitude smaller than the number of parameters. 
+   - The size of intrinsic dimension (as a measure of model complexity) is quite robust against changes in the number of parameters (layer width and depth).  
 3. Given 1 and 2, when choosing number of hidden dimensions of our LSTM model, we are less concerned that having too many parameters 
    would "overfit" and lead to large testing error. Instead, we are more concerned with the trade-off between computational cost 
    and performance. In other words, you are likely to choose a middle ground, where your computation is not yet too expensive 
-   and your model performance is reasonably good.
-
-
+   and your model performance is quite good.
+   
 ## Further reading
-2. [Lilian Weng's blog](https://lilianweng.github.io/lil-log/2019/03/14/are-deep-neural-networks-dramatically-overfitted.html#intrinsic-dimension) (Note: this post is **a rare gem**. 
-   Highly recommended for a thorough review and insightful discussions on model complexity.)
+2. [Lilian Weng's blog](https://lilianweng.github.io/lil-log/2019/03/14/are-deep-neural-networks-dramatically-overfitted.html#intrinsic-dimension) (this post is **a rare gem**. 
+   Highly recommended for a thorough review and insightful discussions on model complexity and beyond)
 3. [The need for biases in learning generalization](http://www-cgi.cs.cmu.edu/~tom/pubs/NeedForBias_1980.pdf)
 3. [Random projection using fastfood](http://proceedings.mlr.press/v28/le13.pdf) 
 
