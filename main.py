@@ -50,7 +50,7 @@ def main_experiment(hidden_size):
     loss_fn = nn.BCEWithLogitsLoss()
 
     # Training
-    train_loss, val_acc, train_acc, test_acc = train(model, train_dataset, val_dataset, test_dataset, loss_fn, optimizer, batch_size = BATCH_SIZE, n_epochs = 200, patience = -1)
+    train_loss, val_acc, train_acc, test_acc = train(model, train_dataset, val_dataset, test_dataset, loss_fn, optimizer, batch_size = BATCH_SIZE, n_epochs = 10, patience = -1)
 
     my_data = pd.DataFrame({"train_loss": train_loss,
                             "val_acc": val_acc,
@@ -60,7 +60,7 @@ def main_experiment(hidden_size):
     max_test_acc = max(test_acc)
     max_index = test_acc.index(max_test_acc)
 
-    my_data.to_csv("./output3/output_hidden_"+ str(hidden_size)+ ".csv" )
+    # my_data.to_csv("./output/output_hidden_"+ str(hidden_size)+ ".csv" )
     # Examine training results
     #plot_loss_acc(train_loss, val_loss, val_acc, output="./output/hidden_" + str(hidden_size) + "_")
 
@@ -77,9 +77,7 @@ test_acc_arr = []
 train_acc_arr = []
 
 
-# hidden_size_arr = [2, 4, 8, 16, 32, 64, 128, 256, 512, 1024]
-
-hidden_size_arr = [2048]
+hidden_size_arr = [32, 64, 128, 256, 512, 1024, 2048]
 
 for hidden_size in hidden_size_arr:
     train_acc, val_acc, test_acc = main_experiment(hidden_size)
@@ -92,6 +90,6 @@ hidden_exp_csv = pd.DataFrame({"hidden_size_arr": hidden_size_arr,
                                "test_acc":test_acc_arr,
                                "train_acc": train_acc_arr})
 
-hidden_exp_csv.to_csv("./output3/hidden_size_all_2048.csv")
+hidden_exp_csv.to_csv("./figures/hidden_size_effect.csv")
 
 

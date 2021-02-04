@@ -12,7 +12,7 @@ import torch.optim as optim
 from pytorch_lstm_04imdb.model_lstm_classifier import LSTMClassifier
 from pytorch_lstm_04imdb.preprocess import *
 from pytorch_lstm_04imdb.preprocess_imdb import *
-from pytorch_lstm_04imdb.train import train_val_test_split, train, predict, calc_metrics, plot_loss_acc
+from pytorch_lstm_04imdb.train import train_val_test_split, train, eval, calc_metrics, plot_loss_acc
 from pytorch_lstm_04imdb.config import *
 
 from pytorch_lstm_04imdb.intrinsic_dim.fastfood import FastfoodWrap
@@ -23,7 +23,7 @@ torch.manual_seed(1)
 
 
 def run_experiment(dim):
-    HIDDEN_DIM=2
+    HIDDEN_DIM=256
     # Data prep
     glove_dict = load_pretrained_embedding(GLOVE_EMBEDDING_PATH)
 
@@ -52,10 +52,10 @@ def run_experiment(dim):
     loss_fn = nn.BCEWithLogitsLoss()
 
     # Training
-    train_loss, val_loss, val_acc = train(model, train_dataset, val_dataset, loss_fn, optimizer, batch_size = BATCH_SIZE, n_epochs = 500, patience = -1)
+    train_loss, val_acc, val_loss, val_acc = train(model, train_dataset, val_dataset, test_dataset, loss_fn, optimizer, batch_size = BATCH_SIZE, n_epochs = 500, patience = -1)
 
     # Examine training results
-    newdir = './output_hiddendim_2/dim_' + str(dim) + "/"
+    newdir = './output_hiddendim_3/dim_' + str(dim) + "/"
     if not os.path.exists(newdir):
         os.mkdir(newdir)
     plot_loss_acc(train_loss, val_loss, val_acc, output=newdir)
@@ -66,8 +66,8 @@ def run_experiment(dim):
     # calc_metrics(pred_prob, y_test)
 
 # Run experiment
-# for dim in [50, 100, 200, 300, 400, 500]:
-for dim in [500, 600]:
+# 50, 100, 200, 300, 400, 500
+for dim in [10, 50, 100, 200, 300, 400, 500]:
     run_experiment(dim)
 
 
