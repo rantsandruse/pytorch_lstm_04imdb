@@ -9,7 +9,7 @@ This is how the concept of overfitting/underfitting is oftentimes explained acco
 
 ![plot](./figures/bias_variance_curve_combined.png)    
 
-[left image source: [Belkin et al, 2020.](https://www.pnas.org/content/116/32/15849.short) right image source: http://scott.fortmann-roe.com/docs/BiasVariance.html] 
+(left source: [Belkin et al, 2020.](https://www.pnas.org/content/116/32/15849.short) right source: http://scott.fortmann-roe.com/docs/BiasVariance.html) 
 
 In this context, "underfitting" happens when the model (or function class) H doesn't have enough parameters and is therefore 
 not complex enough to capture the pattern of the training data. Within the underfitting regime, both training and testing error 
@@ -79,6 +79,7 @@ to the trade-off between performance gain from increasing parameters and computa
    
    ![plot](https://github.com/rantsandruse/pytorch_lstm_04imdb/blob/main/figures/intrinsic_dim_paper2.png) 
    (image source: [Yosinski et al](https://arxiv.org/abs/1804.08838)) 
+
    And finally, the intrinsic dimension is defined as d<sub>int90</sub>, or the d dimensions at which the model achieves 90% performance. 
 
 #### Our experiment with intrinsic dimensions 
@@ -144,9 +145,9 @@ is fairly robust to changes in layer width and depth.
    and your model performance is quite good.
    
 ## Further reading
-2. [Lilian Weng's blog](https://lilianweng.github.io/lil-log/2019/03/14/are-deep-neural-networks-dramatically-overfitted.html#intrinsic-dimension) (this post is **a rare gem**. 
+1. [Lilian Weng's blog](https://lilianweng.github.io/lil-log/2019/03/14/are-deep-neural-networks-dramatically-overfitted.html#intrinsic-dimension) (this post is **a rare gem**. 
    Highly recommended for a thorough review and insightful discussions on model complexity and beyond)
-3. [The need for biases in learning generalization](http://www-cgi.cs.cmu.edu/~tom/pubs/NeedForBias_1980.pdf)
+2. [The need for biases in learning generalization](http://www-cgi.cs.cmu.edu/~tom/pubs/NeedForBias_1980.pdf)
 3. [Random projection using fastfood](http://proceedings.mlr.press/v28/le13.pdf) 
 
 
