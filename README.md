@@ -128,8 +128,9 @@ And now we can run a range of experiments by varying the dimensions of the subsp
       for dim in [10, 50, 100, 200, 300, 400, 500]:
          run_experiment(dim)
 
-Our experiment shows that the intrinsic dimension of our LSTM model is ~400, or **0.4%** of the parameter size. We only ran it 
-for hidden dimension=64, but you are likely to see similar answers with a different choice, as the magnitude of intrinsic dimensions 
+Our experiment shows that the intrinsic dimension of our LSTM model is ~400, or **0.4%** of the parameter size.
+![plot](https://github.com/rantsandruse/pytorch_lstm_04imdb/blob/main/figures/intrinsic_dimension_plot.png) 
+We only ran it for hidden dimension=64, but you are likely to see similar answers with a different choice, as the magnitude of intrinsic dimensions 
 is fairly robust to changes in layer width and depth. 
 
 ## Main takeaway 
